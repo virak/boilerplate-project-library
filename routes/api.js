@@ -51,7 +51,10 @@ module.exports = function (app) {
     })
 
     .delete(function (req, res) {
-      // if successful response will be 'complete delete successful'
+      bookModel.deleteMany({}, function (err, data) {
+        if (err) console.error(err)
+        res.send('complete delete successful')
+      })
     })
 
   app.route('/api/books/:id')
@@ -100,6 +103,14 @@ module.exports = function (app) {
 
     .delete(function (req, res) {
       const bookid = req.params.id
-      // if successful response will be 'delete successful'
+      bookModel.deleteOne({ _id: bookid }, function (err, data) {
+        if (err) console.error(err)
+
+        if (data.deletedCount === 1) {
+          res.send('delete successful')
+        } else {
+          res.send('no book exists')
+        }
+      })
     })
 }
