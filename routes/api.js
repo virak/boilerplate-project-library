@@ -74,7 +74,28 @@ module.exports = function (app) {
     .post(function (req, res) {
       const bookid = req.params.id
       const comment = req.body.comment
-      // json res format same as .get
+
+      if (typeof comment === 'undefined' || comment === '') {
+        res.send('missing required field comment')
+      } else {
+        bookModel.findById(bookid, function (err, book) {
+          if (err) console.error(err)
+
+          if (typeof book === 'undefined' || book === null) {
+            res.send('no book exists')
+          } else {
+            book.comments.push(comment)
+            book.save(function (err) {
+              if (err) console.error(err)
+              res.json({
+                _id: book._id,
+                title: book.title,
+                comments: book.comments
+              })
+            })
+          }
+        })
+      }
     })
 
     .delete(function (req, res) {
