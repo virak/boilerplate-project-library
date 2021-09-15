@@ -61,7 +61,7 @@ module.exports = function (app) {
     .get(function (req, res) {
       bookModel.findById(req.params.id, function (err, book) {
         if (err) console.error(err)
-        if (book !== null) {
+        if (book !== null && typeof book !== 'undefined') {
           const returnData = {
             _id: book._id,
             title: book.title,
@@ -106,7 +106,7 @@ module.exports = function (app) {
       bookModel.deleteOne({ _id: bookid }, function (err, data) {
         if (err) console.error(err)
 
-        if (data.deletedCount === 1) {
+        if (typeof data !== 'undefined' && data.deletedCount === 1) {
           res.send('delete successful')
         } else {
           res.send('no book exists')

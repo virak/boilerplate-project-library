@@ -55,6 +55,17 @@ const server = https.createServer(options, app)
 
 server.listen(3000, () => {
   console.log('Server https listening on port : ' + 3000)
+  if (process.env.NODE_ENV === 'test') {
+    console.log('Running Tests...')
+    setTimeout(function () {
+      try {
+        runner.run()
+      } catch (e) {
+        console.log('Tests are not valid:')
+        console.error(e)
+      }
+    }, 1500)
+  }
 })
 
 // Start our server and tests!
